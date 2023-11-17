@@ -1,35 +1,38 @@
 import React from "react";
-import { shallow } from "enzyme";
 import NotificationItem from "./NotificationItem";
+import { shallow } from "enzyme";
 
-const wrapper = shallow(<NotificationItem type='default' value='test'/>);
-describe('NotificationItem components', () => {
-  it('renders without crashing', () => {
-    const result = wrapper.exists();
-    expect(result).toBe(true);
-  });
-  it('renders the correct html', () => {
-    let result = wrapper.prop('data-notification-type');
-    expect(result).toBe('default');
-    result = wrapper.find('li').text();
-    expect(result).toBe('test');
-  });
-  it('renders the correct html', () => {
-    const wrappers = shallow(<NotificationItem  html={{ __html: '<u>test</u>' }}/>);
-    const result = wrappers.prop('dangerouslySetInnerHTML');
-    expect(result).toEqual({ __html: '<u>test</u>' });
-  });
-})
+describe("rendering components", () => {
+  it("renders NotificationItem component without crashing", () => {
+    const wrapper = shallow(<NotificationItem />);
 
-describe('markAsRead', () => {
-  it('markAsRead message', () => {
-    const id = 16;
-    const markAsRead = jest.fn();
-    const wrapper = shallow(
-      <NotificationItem type='default' value='test' id={id} markAsRead={markAsRead} />
-    );
-    const listItem = wrapper.find('li').first();
-    listItem.simulate('click');
-    expect(markAsRead).toHaveBeenCalledWith(id);
+    expect(wrapper.exists()).toBe(true);
+  });
+
+  it('renders correct html from type="default" value="test" props', () => {
+    const wrapper = shallow(<NotificationItem />);
+
+    wrapper.setProps({ type: "default", value: "test" });
+    expect(wrapper.html()).toEqual('<li data-notification-type="default">test</li>');
+  });
+
+  it('renders correct html from  html="<u>test</u>" props', () => {
+    const wrapper = shallow(<NotificationItem />);
+
+    wrapper.setProps({ html: "<u>test</u>" });
+    expect(wrapper.html()).toEqual('<li data-urgent="true"><u>test</u></li>');
+  });
+});
+
+describe("onclick event behaves as it should", () => {
+  it("should call console.log", () => {
+    const wrapper = shallow(<NotificationItem />);
+    const spy = jest.fn();
+
+    wrapper.setProps({ value: "test item", markAsRead: spy, id: 1 });
+    wrapper.find("li").props().onClick();
+    expect(spy).toBeCalledTimes(1);
+    expect(spy).toBeCalledWith(1);
+    spy.mockRestore();
   });
 });

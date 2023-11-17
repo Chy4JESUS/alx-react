@@ -1,15 +1,12 @@
-.header {
-  display: flex;
-  align-items: center;
-  color: rgb(231, 80, 80);
-  border-bottom: thick solid rgb(231, 80, 80);
-  width: 100rem;
-}
-
-.header h1 {
-  margin: 0;
-}
-
-.header img {
-  width: 150px;
-}
+.App-header {
+    font-size: 1.4rem;
+    color: #e0354b;
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid #e0354b;
+   }
+   
+   .App-header img {
+    width: 200px;
+    height: 200px;
+   }
